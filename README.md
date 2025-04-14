@@ -31,3 +31,10 @@ sudo attinv path/to/conf/file.conf
 ```
 
 To log a period of focus, use `<Ctrl-Super> P`.
+
+
+### TODOs
+- Support customized hotkeys.
+- Organize code better.
+- Support MacOS.
+    - Add `cmake` build script.
