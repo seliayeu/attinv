@@ -1,5 +1,6 @@
 #include <libinput.h>
 #include <string>
+#include <sstream>
 #include <libudev.h>
 #include <iostream>
 #include <fstream>
@@ -12,6 +13,17 @@
 #include <iomanip>
 
 typedef std::pair<std::chrono::time_point<std::chrono::system_clock>, std::chrono::time_point<std::chrono::system_clock>> timeInterval;
+
+struct AttinvConfig {
+    std::string outputDir;
+    std::string configFilename;
+
+    AttinvConfig(std::string configFilename) : configFilename(configFilename) {
+        std::ifstream configFile(configFilename);
+        configFile >> outputDir;
+        std::cout << outputDir << std::endl;
+    }
+};
 
 static int open_restricted(const char *path, int flags, void *user_data) {
     int fd = open(path, flags);
@@ -36,14 +48,25 @@ void writeToFile(std::string filename, std::vector<timeInterval> intervalVec) {
 
         std::time_t tStart = std::chrono::system_clock::to_time_t(tI.first);
         std::time_t tEnd = std::chrono::system_clock::to_time_t(tI.second);
-        logFile << mins << "." << (int) ((millis % 60000) / 60000.0) * 1000;
-        logFile << ": " << std::put_time(std::localtime(&tStart), "%F %T") << " to " << std::put_time(std::localtime(&tEnd), "%F %T") << "\n";
+
+        logFile << std::setfill('0') << std::setw(2) << mins << "." << std::setfill('0') << std::setw(3)  << (int) (millis % 60000 / 60000.0 * 1000);
+        logFile << ": " << std::put_time(std::localtime(&tStart), "%T") << " to " << std::put_time(std::localtime(&tEnd), "%T") << "\n";
     }
     logFile.close();
 }
 
  
-int main(void) {
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        std::cerr << "Expected one argument. Usage:" << std::endl;
+        std::cerr << "attinv <CONFIG_FILE>" << std::endl;
+        return 1;
+    }
+
+    std::string filename = argv[1];
+
+    AttinvConfig config(filename);
+
     using std::pair;
     using namespace std::literals;
     using std::vector;
@@ -81,7 +104,11 @@ int main(void) {
                 currTime = system_clock::now();
                 intervalVec.push_back(timeInterval{prevTime, currTime});
                 auto diff = duration_cast<milliseconds>(currTime - prevTime);
-                std::cout << (diff.count() / 1000) << "." << (diff.count() % 1000) << std::endl;
+                // std::cout << (diff.count() / 1000) << "." << (diff.count() % 1000) << std::endl;
+                auto date = std::chrono::system_clock::to_time_t(prevTime);
+                std::stringstream ss;
+                ss << config.outputDir << "/" << std::put_time(std::localtime(&date), "%F") << ".log";
+                writeToFile(ss.str(), intervalVec);
             }
 
             libinput_event_destroy(event);
