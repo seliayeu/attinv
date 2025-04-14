@@ -1,6 +1,6 @@
-Simple C++ app to test the hypothesis: if I record the lengths of periods of
+Simple C++ app to test the hypothesis: if I record the length of periods of
 uninterrupted focus and give myself positive reinforcement for longer periods,
-I should be able to train my mind to focus for longer periods more easily.
+I should be able to train my mind to focus for long periods of time more easily.
 
 ### Installation and Setup
 Made to work on Wayland.
