@@ -33,6 +33,21 @@ sudo attinv path/to/conf/file.conf
 To log a period of focus, use `<Ctrl-Super> P`.
 
 
+### Config Specification
+
+The currently supported config options are `log_dir` and `log_hotkey`.
+- `log_dir` should be set to a string value representing a directory.
+- `log_hotkey` should be set to a string value representing a hotkey combination. The format should look like `<Ctrl-Super> P` with modifiers `Ctrl`, `Shift`, `Alt`, and `Super` 
+enclosed in `<>`.
+
+Each non-empty line of the config is expected to have the following syntax:
+
+```
+option_name = option_value
+```
+
+
+
 ### TODOs
 - Support customized hotkeys.
 - Organize code better.

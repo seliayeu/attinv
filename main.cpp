@@ -17,11 +17,47 @@ typedef std::pair<std::chrono::time_point<std::chrono::system_clock>, std::chron
 struct AttinvConfig {
     std::string outputDir;
     std::string configFilename;
+    std::vector<short> logHotkey;
 
     AttinvConfig(std::string configFilename) : configFilename(configFilename) {
         std::ifstream configFile(configFilename);
-        configFile >> outputDir;
-        std::cout << outputDir << std::endl;
+        std::string optionName;
+        char tmp;
+        
+        while (configFile >> optionName) {
+            configFile >> tmp;
+            if (tmp != '=') {
+                // TODO: look into C++ error throwing (is it cursed? is it standard?)
+                std::cerr << "Incorrectly formatted config file." << std::endl;
+                exit(1);
+            }
+            if (optionName == "log_dir")
+                configFile >> outputDir;
+            else if (optionName == "log_hotkey") {
+                std::string hotkeyString;
+                configFile >> hotkeyString;
+                logHotkey = parseHotkeyString(hotkeyString);
+            } else {
+                std::cerr << "Invalid option name." << std::endl;
+                exit(1);
+            }
+        }
+    }
+private:
+    std::vector<short> parseHotkeyString(std::string hotkeyString) {
+        // assume string has form "<?-?-...-?> ?"
+        std::vector<short> keys;
+        std::string modifiers = hotkeyString.substr(0, hotkeyString.find(" "));
+        modifiers = modifiers.substr(1, modifiers.length() - 1); // remove <>
+        
+        while (true) {
+            std::string modifier = modifiers.substr(0, modifiers.find("-"));
+
+        }
+
+        std::string key = hotkeyString.substr(hotkeyString.find(" ") + 1);
+
+        return keys;
     }
 };
 
@@ -104,10 +140,11 @@ int main(int argc, char** argv) {
                 currTime = system_clock::now();
                 intervalVec.push_back(timeInterval{prevTime, currTime});
                 auto diff = duration_cast<milliseconds>(currTime - prevTime);
-                // std::cout << (diff.count() / 1000) << "." << (diff.count() % 1000) << std::endl;
+
                 auto date = std::chrono::system_clock::to_time_t(prevTime);
                 std::stringstream ss;
                 ss << config.outputDir << "/" << std::put_time(std::localtime(&date), "%F") << ".log";
+
                 writeToFile(ss.str(), intervalVec);
             }
 
