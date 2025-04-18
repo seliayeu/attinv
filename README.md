@@ -30,15 +30,14 @@ Run with:
 sudo attinv path/to/conf/file.conf
 ```
 
-To log a period of focus, use `<Ctrl-Super> P`.
+To log a period of focus, use `Ctrl-Super-P`.
 
 
 ### Config Specification
 
 The currently supported config options are `log_dir` and `log_hotkey`.
 - `log_dir` should be set to a string value representing a directory.
-- `log_hotkey` should be set to a string value representing a hotkey combination. The format should look like `<Ctrl-Super> P` with modifiers `Ctrl`, `Shift`, `Alt`, and `Super` 
-enclosed in `<>`.
+- `log_hotkey` should be set to a string value representing a hotkey combination. The format should look like `Ctrl-Super-P` with keys separated by -.
 
 Each non-empty line of the config is expected to have the following syntax:
 
@@ -46,10 +45,7 @@ Each non-empty line of the config is expected to have the following syntax:
 option_name = option_value
 ```
 
-
-
 ### TODOs
-- Support customized hotkeys.
-- Organize code better.
+- Add `cmake` build script.
 - Support MacOS.
-    - Add `cmake` build script.
+- Look into how to make it appear in the top bar dock.
