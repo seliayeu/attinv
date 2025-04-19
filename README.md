@@ -46,6 +46,8 @@ option_name = option_value
 ```
 
 ### TODOs
-- Add `cmake` build script.
+- Figure out using supplementary files (my keycodes file) for stuff with CMake
+- Write tests?
 - Support MacOS.
 - Look into how to make it appear in the top bar dock.
+
