@@ -2,11 +2,16 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 
 #include "./utils.hpp"
 
 void writeToFile(std::string filename, std::vector<timeInterval> intervalVec) {
     std::ofstream logFile(filename);
+    if (!logFile.is_open()) {
+        std::cerr << "Error opening log file" << std::endl;
+        exit(1);
+    }
 
     for (timeInterval tI : intervalVec) {
         int mins = std::chrono::duration_cast<std::chrono::minutes>(tI.second - tI.first).count();

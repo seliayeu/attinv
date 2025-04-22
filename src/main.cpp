@@ -29,7 +29,7 @@ const static struct libinput_interface interface = {
     .close_restricted = close_restricted,
 };
 
-void attinvLoop(AttinvConfig config) {
+void attinvLoop(const AttinvConfig &config) {
     using std::pair;
     using namespace std::literals;
     using std::vector;

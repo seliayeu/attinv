@@ -11,7 +11,6 @@ AttinvConfig::AttinvConfig(std::string configFilename) : configFilename(configFi
     char tmp;
     
     while (configFile >> optionName) {
-        configFile >> tmp;
         if (tmp != '=') {
             // TODO: look into C++ error throwing (is it cursed? is it standard?)
             std::cerr << "Incorrectly formatted config file." << std::endl;
