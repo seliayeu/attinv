@@ -13,6 +13,8 @@
 
 #include <gtk/gtk.h>
 #include <libappindicator/app-indicator.h>
+#include <pthread.h>
+#include <assert.h>
 
 #include "attinv/attinvconf.hpp"
 #include "attinv/utils.hpp"
@@ -82,6 +84,11 @@ void attinvLoop(const AttinvConfig &config) {
     libinput_unref(li);
 
 }
+
+void* gtkLoop(void* arguments) {
+    std::cout << "in the gtk loop!" << std::endl;
+    return NULL;
+}
  
 int main(int argc, char** argv) {
     if (argc != 2) {
@@ -97,6 +104,11 @@ int main(int argc, char** argv) {
     //
     // AppIndicator* indicator = app_indicator_new_with_path("ATTINV", "smiley", APP_INDICATOR_CATEGORY_APPLICATION_STATUS, "icon.png");
 
+    pthread_t gtkThread;
+    int resultCode = pthread_create(&gtkThread, NULL, gtkLoop, NULL);
+    assert(!resultCode);
+    resultCode = pthread_detach(gtkThread);
+    assert(!resultCode);
 
     std::string filename = argv[1];
     AttinvConfig config(filename);
