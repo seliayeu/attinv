@@ -11,6 +11,9 @@
 #include <iomanip>
 #include <algorithm>
 
+#include <gtk/gtk.h>
+#include <libappindicator/app-indicator.h>
+
 #include "attinv/attinvconf.hpp"
 #include "attinv/utils.hpp"
 
@@ -86,6 +89,14 @@ int main(int argc, char** argv) {
         std::cerr << "attinv <CONFIG_FILE>" << std::endl;
         return 1;
     }
+
+    // AppIndicator* indicator = *app_indicator_new_with_path      (const gchar          *id,
+    //                                                               const gchar          *icon_name,
+    //                                                               AppIndicatorCategory  category,
+    //                                                               const gchar          *icon_theme_path);
+    //
+    // AppIndicator* indicator = app_indicator_new_with_path("ATTINV", "smiley", APP_INDICATOR_CATEGORY_APPLICATION_STATUS, "icon.png");
+
 
     std::string filename = argv[1];
     AttinvConfig config(filename);

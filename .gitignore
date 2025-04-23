@@ -3,3 +3,4 @@ logs/
 *.conf
 build/
 *.hpp.pch
+.cache
